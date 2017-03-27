@@ -53,6 +53,7 @@ int main(int argc, const char * argv[]) {
          
          arrSize = i;
          */
+        system("clear");
         int array[]= {3, 44, 38, 5, 47, 15, 36, 26, 27, 2, 46, 4, 19, 50, 48};
         arrSize = 14;
         display(array);
