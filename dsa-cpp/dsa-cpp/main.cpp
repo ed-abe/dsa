@@ -45,11 +45,17 @@ void display(int dist[],bool src[]){
     
 }
 // A utility function to print the constructed distance array
-void printSolution(int dist[], int n)
+void printSolution(int dist[], int n, int incoming[V][V+1])
 {
-    printf("Vertex   Distance from Source\n");
-    for (int i = 0; i < V; i++)
-        printf("%d \t\t %d\n", i, dist[i]);
+    printf("Vertex   Distance from Source  From vector \n");
+    for (int i = 0; i < V; i++){
+        printf("%d \t\t %d", i, dist[i]);
+        printf("  \t\t\t\t\t ");
+        for(int j=1;j<=incoming[i][0];j++){
+            printf("%2d,",incoming[i][j]);
+        }
+        printf("\n");
+    }
 }
 
 // Funtion that implements Dijkstra's single source shortest path algorithm
@@ -58,13 +64,16 @@ void dijkstra(int graph[V][V], int src)
 {
     int dist[V];     // The output array.  dist[i] will hold the shortest
                     // distance from src to i
-    
+    int incoming[V][V+1];
     bool sptSet[V]; // sptSet[i] will true if vertex i is included in shortest
                     // path tree or shortest distance from src to i is finalized
     
     // Initialize all distances as INFINITE and stpSet[] as false
-    for (int i = 0; i < V; i++)
+    for (int i = 0; i < V; i++){
         dist[i] = INT_MAX, sptSet[i] = false;
+        for (int j = 0; j < V+1; j++)
+         incoming[i][j] = 0;
+    }
     
     // Distance of source vertex from itself is always 0
     dist[src] = 0;
@@ -89,13 +98,15 @@ void dijkstra(int graph[V][V], int src)
             // smaller than current value of dist[v]
             if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX && dist[u]+graph[u][v] < dist[v]){
                 dist[v] = dist[u] + graph[u][v];
+                incoming[v][incoming[v][0] + 1] = u;
+                incoming[v][0]++;
                 display(dist, sptSet);
             }
     }
     
     printf("=========================================\n");
     // print the constructed distance array
-    printSolution(dist, V);
+    printSolution(dist, V, incoming);
 }
 
 int main(int argc, const char * argv[]) {
